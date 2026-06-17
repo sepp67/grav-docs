@@ -1,0 +1,18 @@
+services:
+  grav:
+    build: .
+    container_name: grav-local
+    ports:
+      - "8080:80"
+    environment:
+      # Bootstrap optionnel d'un compte admin au premier démarrage.
+      # Laisser ces trois variables commentées = aucun compte créé.
+      # GRAV_ADMIN_USER: admin
+      # GRAV_ADMIN_PASSWORD: ChangeMe123
+      # GRAV_ADMIN_EMAIL: admin@example.com
+    volumes:
+      - grav_user:/var/www/html/user
+    restart: unless-stopped
+
+volumes:
+  grav_user:
