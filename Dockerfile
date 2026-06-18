@@ -29,8 +29,13 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 COPY docker/bootstrap-admin.sh /bootstrap-admin.sh
-COPY grav/user /tmp/grav-user
 
+# IMPORTANT : on copie le contenu RÉEL de user/ tel que téléchargé par
+# grav-admin (qui inclut notamment le thème par défaut "quark"), PAS notre
+# ancien squelette vide (grav/user/**/.gitkeep). Sans cela, le premier
+# rsync vers le volume monté écrase le thème par défaut, et Grav échoue
+# avec : "Theme 'quark' does not exist".
+RUN cp -a /var/www/html/user /tmp/grav-user
 RUN chmod +x /entrypoint.sh /bootstrap-admin.sh
 
 EXPOSE 80
